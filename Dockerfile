@@ -85,7 +85,7 @@ RUN rm -rf /var/www/var/data_dev.db
 
 RUN /usr/bin/composer install
 RUN /usr/local/bin/php bin/console doctrine:database:create
-RUN /usr/local/bin/php bin/console bin/console doctrine:migrations:migrate
+RUN /usr/local/bin/php bin/console doctrine:migrations:migrate
 RUN chown -R www-data:www-data var/data_dev.db
 RUN chmod -R 775  var/data_dev.db
 EXPOSE 80
