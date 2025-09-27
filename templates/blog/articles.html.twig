@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <!-- Header -->
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">
+
+            <img src="/assets/title_en.gif">
+
+        </h1>
+        <p class="lead">
+
+        </p>
+    </div>
+    <div style="max-width: 70%; margin: 0 auto;">
+
+
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-md-9">
+
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{ article.title }} {% if app.user == article.author %} <a href="{{ path('app_blog_post_edit', {'id': article.id}) }}"><img src="{{ asset('assets/icons/notepad-0.png') }}"> </a> {% endif %}</h4>
+                    </div>
+                    <div class="card-body">
+                            {{ article.content|mdtohtml|raw }}
+
+
+
+                    </div>
+
+            </div>
+        </div>
+        <div class="col-md-3">
+
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Info</h4>
+                    </div>
+                    <div class="card-body">
+                        <a href="/"> <img src="{{ asset('assets/borzoi.png') }}" class="card-img-top w-50 text-center align-content-center mx-auto d-block" alt="{{ article.author.username }}">
+                        </a>
+                            <h3>Written by {{ article.author.username }}</h3>
+                        <p>At {{ article.publishedAt.format('d/m/y  - H:i') }}</p>
+                        {% if article.tags is not null %}
+
+                        {% for tag in article.tags|split(',')  %}
+
+                            <a href="{{ path('app_blog_articles_tag', {'tag': tag|trim}) }}">{{ tag|trim }}</a>
+                            {% else %}
+                            <p>No tags</p>
+                        {% endfor %}
+                        {% endif %}
+
+
+
+                    </div>
+                </div>
+
+        </div>
+        {% endfor %}
+    </div>
+        {% if currentPage > 0 %}
+        <div class="container d-flex justify-content-end" style="max-width: 50%; margin: 0 auto;">
+            <button class="btn btn-primary">
+                {% if tag is null %}
+                <a href="{{ path('app_blog_articles_page', {'page': currentPage-1}) }}">← Previous Page</a>
+                {% else %}
+                <a href="{{ path('app_blog_articles_tag_page', {'page': currentPage-1, 'tag': tag}) }}">← Previous Page</a>
+                {% endif %}
+            </button>
+        {% endif %}
+        {% if currentPage < totalPages %}
+        <div class="container d-flex justify-content-end" style="max-width: 50%; margin: 0 auto;">
+            <button class="btn btn-primary">
+                {% if tag is null %}
+
+                <a href="{{ path('app_blog_articles_page', {'page': currentPage+1}) }}">Next Page →</a>
+
+                {% else %}
+                <a href="{{ path('app_blog_articles_tag_page', {'page': currentPage+1, 'tag': tag}) }}">Next Page →</a>
+                {% endif %}
+
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

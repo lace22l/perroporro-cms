@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artwork index{% endblock %}
+
+{% block body %}
+    <h1>Artwork index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>ArtistName</th>
+                <th>ArtistUrl</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for artwork in artworks %}
+            <tr>
+                <td>{{ artwork.id }}</td>
+                <td>{{ artwork.name }}</td>
+                <td>{{ artwork.description }}</td>
+                <td>{{ artwork.artistName }}</td>
+                <td>{{ artwork.artistUrl }}</td>
+                <td>
+                    <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">show</a>
+                    <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_artwork_new') }}">Create new</a>
+{% endblock %}

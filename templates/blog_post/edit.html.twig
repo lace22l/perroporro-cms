@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit BlogPost{% endblock %}
+
+{% block body %}
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">
+
+            Create a new BlogPost
+        </h1>
+        <p class="lead">
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-12 text-center ">
+                <div class="card square mb-4 mx-auto">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal"> A</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1></h1>
+
+                        {{ include('blog_post/_form.html.twig', {'button_label': 'Update'}) }}
+
+                        {{ include('blog_post/_delete_form.html.twig') }}
+                        <a href="{{ path('app_blog_post_index') }}">back to list</a>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({ element: document.getElementById("blog_post_content") });
+    </script>
+{% endblock %}
+
+

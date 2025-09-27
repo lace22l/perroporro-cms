@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AppSetting index{% endblock %}
+
+{% block body %}
+    <h1>AppSetting index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for app_setting in app_settings %}
+            <tr>
+                <td>{{ app_setting.id }}</td>
+                <td>{{ app_setting.name }}</td>
+                <td>{{ app_setting.value }}</td>
+                <td>
+                    <a href="{{ path('app_setting_show', {'id': app_setting.id}) }}">show</a>
+                    <a href="{{ path('app_setting_edit', {'id': app_setting.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_setting_new') }}">Create new</a>
+{% endblock %}

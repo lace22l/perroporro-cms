@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit AppSetting{% endblock %}
+
+{% block body %}
+    <h1>Edit AppSetting</h1>
+
+    {{ include('app_setting/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_setting_index') }}">back to list</a>
+
+    {{ include('app_setting/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,3 @@
+#min hour day month weekday command
+*/3 * * * * /usr/local/bin/php /var/www/bin/console app:schedule health >> /var/log/cron.log 2>&1
+*/30 * * * * /usr/local/bin/php /var/www/bin/console app:schedule inventory >> /var/log/cron.log 2>&1

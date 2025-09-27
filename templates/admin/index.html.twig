@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Dashboard</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><a href="{{ path('app_artwork_index') }}">Artwork</a></li>
+                            <li><a href="{{ path('app_image_index') }}">Image</a></li>
+                            <li><a href="{{ path('app_blog_post_index') }}"> Blog </a></li>
+                            <li><a href="{{ path('app_setting_index') }}"> App Settings </a></li>
+                            <li><a href="{{ path('app_info_card_index') }}"> Cards </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,299 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GalleryController!{% endblock %}
+
+
+
+{% block body %}
+    <style>
+        .card.draggable {
+            cursor: grab;
+            user-select: none;
+            touch-action: none; /* helps with touch dragging */
+        }
+
+        .card.dragging {
+            opacity: 0.95;
+            cursor: grabbing;
+            transition: none !important; /* immediate response while dragging */
+            z-index: 9999; /* keep above everything */
+        }
+
+        /* Optional: visual drag handle in the header */
+        .drag-handle { cursor: grab; }
+
+        /* Make sure cards keep their intrinsic size when absolutely positioned */
+        .card[data-abs="true"] {
+            width: 18rem;
+        }
+    </style>
+<!-- Header -->
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+
+        <img src="/assets/title_en.gif">
+
+    </h1>
+    <p class="lead">
+        Art Gallery
+    </p>
+</div>
+<div style="max-width: 70%; margin: 0 auto;">
+        <div class="row"> {#  #}
+            <div class="col-md-2">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">Categories</div>
+                    <div class="card-body">
+                        {% if app.user is not null %}
+                            <button
+                                data-target="#exampleModal"
+                                data-toggle="modal"
+                                style="cursor: pointer;"
+                                hx-target="#modal-body"
+                                hx-swap="innerHTML"
+                                hx-get="{{ path('app_artwork_new') }}"
+
+                                class="btn btn-sm btn-outline-secondary w-100">Upload Artwork</button>
+
+                        {% endif %}
+                        {# <button id="resetBtn" class="btn btn-sm btn-outline-secondary w-100">Reset positions</button> #}
+
+                        <ul>
+                            <li><a href="{{ path('app_gallery') }}">No folder</a></li>
+
+                            {% for folder in folders %}
+                                <li><a href="{{ path('app_gallery_folder', {'folderName': folder}) }}">{{ folder }}</a></li>
+                            {% endfor %}
+
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    {% for artwork in artworks %}
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm draggable" data-id="card-{{ artwork.id }}">
+                                <div class="card-header drag-handle">{{ artwork.name }}</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a href="{{ path('app_gallery_detail', {'artwork': artwork.id}) }}"><img class="img-fluid" src="{{ artwork.nSFW ? 'https://media.istockphoto.com/id/1356222720/vector/sensitive-content-warning-icon-eye-vector-sensitive-content-explicit-porn-photo-censored.jpg?s=612x612&w=0&k=20&c=ZCWj_XR_b7IJ5bvZRHp3JBNPCUn0bdewRjKk-bCE8ac=' : artwork.imageURL }}">
+
+                                            </a>
+                                        </div>
+
+                                        <div class="col-md-12 text-center">by <a href="{{artwork.artistUrl }}">{{ artwork.artistName }} </a></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ref Sheet</h5>
+                    <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    {#
+<script>
+    (function () {
+        // Configuration
+        const handleSelector = '.drag-handle'; // set to null to drag from anywhere on the card
+        const keepInViewport = false; // if true, snapping will keep card inside viewport
+        const persistKey = 'draggableCardPositionsV1'; // set null to disable persistence
+
+        const gallery = document.getElementById('gallery');
+        let activeDrag = null; // {el, startX, startY, elStartLeft, elStartTop, pointerId}
+
+        // Helpers
+        function getRect(el) { return el.getBoundingClientRect(); }
+
+        function toNumberPx(v) { return parseFloat(v || 0); }
+
+        function ensureAbsoluteAndAppend(el) {
+            // If element is currently inside a grid column, convert it to absolute so it can move anywhere.
+            // We'll preserve the visual position by computing current page coordinates.
+            if (el.dataset.abs === 'true') return;
+
+            const rect = getRect(el);
+            // set explicit size so it doesn't collapse
+            el.style.width = rect.width + 'px';
+            el.style.height = rect.height + 'px';
+
+            // set absolute positioning relative to the document body
+            el.style.position = 'absolute';
+            el.style.left = rect.left + window.scrollX + 'px';
+            el.style.top = rect.top + window.scrollY + 'px';
+
+            // move element to body so it can go outside gallery
+            document.body.appendChild(el);
+            el.dataset.abs = 'true';
+        }
+
+        function onPointerDown(e) {
+            // support both mouse and touch via pointer events
+            // only start if left mouse button or touch
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+            const target = e.target.closest('.draggable');
+            if (!target) return;
+
+            // if a handle is specified, ensure the pointer started on the handle
+            if (handleSelector) {
+                const handle = e.target.closest(handleSelector);
+                if (!handle || !target.contains(handle)) return;
+            }
+
+            e.preventDefault();
+            target.setPointerCapture(e.pointerId);
+
+            ensureAbsoluteAndAppend(target);
+
+            const rect = getRect(target);
+
+            activeDrag = {
+                el: target,
+                pointerId: e.pointerId,
+                startX: e.clientX,
+                startY: e.clientY,
+                elStartLeft: rect.left + window.scrollX,
+                elStartTop: rect.top + window.scrollY
+            };
+
+            target.classList.add('dragging');
+
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', onPointerUp);
+            window.addEventListener('pointercancel', onPointerUp);
+        }
+
+        function onPointerMove(e) {
+            if (!activeDrag || e.pointerId !== activeDrag.pointerId) return;
+            e.preventDefault();
+
+            const dx = e.clientX - activeDrag.startX;
+            const dy = e.clientY - activeDrag.startY;
+
+            let left = activeDrag.elStartLeft + dx;
+            let top = activeDrag.elStartTop + dy;
+
+            if (keepInViewport) {
+                // clamp to viewport
+                const elRect = getRect(activeDrag.el);
+                left = Math.min(Math.max(left, window.scrollX), window.scrollX + window.innerWidth - elRect.width);
+                top = Math.min(Math.max(top, window.scrollY), window.scrollY + window.innerHeight - elRect.height);
+            }
+
+            activeDrag.el.style.left = left + 'px';
+            activeDrag.el.style.top = top + 'px';
+        }
+
+        function onPointerUp(e) {
+            if (!activeDrag || e.pointerId !== activeDrag.pointerId) return;
+            const el = activeDrag.el;
+            el.releasePointerCapture(activeDrag.pointerId);
+            el.classList.remove('dragging');
+
+            // clean inline height so card can expand if content changes
+            el.style.height = '';
+
+            // Save final position to dataset and localStorage (optional)
+            const left = toNumberPx(el.style.left);
+            const top = toNumberPx(el.style.top);
+            el.dataset.x = left;
+            el.dataset.y = top;
+
+            savePositions();
+
+            activeDrag = null;
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+        }
+
+        // Persistence
+        function savePositions() {
+            if (!persistKey) return;
+            const data = {};
+            document.querySelectorAll('.card[data-id]').forEach(c => {
+                if (c.dataset.x && c.dataset.y) data[c.dataset.id || c.dataset.id] = { x: c.dataset.x, y: c.dataset.y };
+            });
+            try { localStorage.setItem(persistKey, JSON.stringify(data)); } catch (err) { /* ignore */ }
+        }
+
+        function loadPositions() {
+            if (!persistKey) return;
+            try {
+                const raw = localStorage.getItem(persistKey);
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                Object.keys(data).forEach(k => {
+                    const card = document.querySelector('.card[data-id="' + k + '"]');
+                    if (!card) return;
+                    const { x, y } = data[k];
+                    ensureAbsoluteAndAppend(card);
+                    card.style.left = x + 'px';
+                    card.style.top = y + 'px';
+                    card.dataset.x = x;
+                    card.dataset.y = y;
+                });
+            } catch (err) { /* ignore */ }
+        }
+
+        // Reset positions
+        function resetPositions() {
+            document.querySelectorAll('.card[data-id]').forEach(c => {
+                if (c.dataset.abs === 'true') {
+                    // move back inside the original grid column
+                    // For simplicity we reload the page to restore original layout
+                    // (alternative: track original parent & index and reinsert)
+                    try { localStorage.removeItem(persistKey); } catch (err) {}
+                }
+            });
+            location.reload();
+        }
+
+        // Initialize
+        function init() {
+            // Use pointer events for unified mouse/touch/stylus handling
+            window.addEventListener('pointerdown', onPointerDown);
+
+            document.getElementById('resetBtn').addEventListener('click', resetPositions);
+
+            // restore saved positions
+            loadPositions();
+        }
+
+        init();
+
+    })();
+</script> #}
+{% endblock %}

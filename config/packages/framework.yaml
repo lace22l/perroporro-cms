@@ -1,0 +1,19 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    trusted_proxies: ['127.0.0.1', '10.0.1.0/24', '10.0.6.0/24'] # match your Docker network CIDR
+    trusted_headers: [x-forwarded-for, x-forwarded-host, x-forwarded-proto, x-forwarded-port]
+    secret: '%env(APP_SECRET)%'
+
+    # Note that the session will be started ONLY if you read or write from it.
+    session:
+        cookie_secure: auto   # lets Symfony set secure cookies only on HTTPS
+        cookie_samesite: lax  # prevents issues with modern browsers
+
+    #esi: true
+    #fragments: true
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file

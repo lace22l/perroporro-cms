@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <style>
+        body {
+            font-family: "MS Sans Serif",Tahoma,Verdana,Segoe,sans-serif;
+            background: teal;
+            color: white;
+            padding-bottom: 28px;
+            background-image: url({{ bg.value }});
+        }
+        .card-header, .card-header h4, .card-header h4 span {
+            cursor: pointer !important;
+            pointer-events: auto !important;
+        }
+        .img-fluid {
+            cursor: pointer !important;
+            pointer-events: auto !important;
+        }
+    </style>
+    <!-- Navbar -->
+
+
+    <!-- Header -->
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">
+                {{ title.value|raw }}
+
+
+        </h1>
+        {% if app.user %}
+        <a type="button" class="btn btn-primary w-100" href="{{ path('app_dashboard_index') }}">Dashboard</a>
+        {% endif %}
+
+    </div>
+
+
+
+<div class="container">
+    <div class="row mb-5">
+        {% for card in cards %}
+            <div class="col-md-{{ card.colSize}} {% if card.colOffset !=0 %} offset-md-{{ card.colOffset }}{% endif%} text-center ">
+                <div class="card square mb-4 mx-auto" style="max-width: 25em;">
+                    <div class="card-header" style="cursor: pointer;">
+                        {{card.title|raw}}
+                    </div>
+                    <div class="card-body" style=" max-width: 25em;">
+                        {{ card.cardBody|raw }}
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+    <!-- Modal -->
+
+
+    <!-- OTHER-->
+    {% if blogEnabled.value == "1" %}
+    <div class="container">
+        <hr style="border: 1px solid white;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Latest Blog Post</h4>
+            </div>
+            <div class="card-body">
+
+              {{ render(controller('App\\Controller\\BlogController::index')) }}
+
+                <button class="btn btn-outline-primary w-100"> <a href="{{ path('app_blog_articles') }}"> Articles </a></button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+{%endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row p-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">Installer</div>
+                <div class="card-body">
+                    <h2> To install we will just have to create an admin user </h2>
+                    <h3>Once installed, you can navigate to <b>/admin</b> to manage app settings, upload assets, create blog posts, manage the gallery and change info boxes </h3>
+                    <a class="btn btn-primary w-100" href="{{ path('app_register') }}">Create User</a>
+
+                </div>
+            </div>
+
+           </div>
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New InfoCard{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/trumbowyg/dist/ui/trumbowyg.min.css">
+
+    <h1>Create new InfoCard</h1>
+
+    {{ include('info_card/_form.html.twig') }}
+
+    <a href="{{ path('app_info_card_index') }}">back to list</a>
+
+
+
+{% endblock %}
+{% block javascripts %}
+
+
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/trumbowyg/dist/trumbowyg.min.js"></script>
+    <script>
+        $('#info_card_cardBody').trumbowyg();
+        $('#info_card_title').trumbowyg();
+    </script>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">
+
+            <img src="/assets/title_{{ app.request.locale }}.gif">
+
+        </h1>
+
+    </div>
+    <div class="row">
+
+        <div class="col-md-12 " ><h1></h1></div>
+        <div class="col-md-12">
+            <div class="card w-75  mx-auto" >
+                <div class="card-header">{{ artwork.name }}</div>
+                <div class="card-body">
+                    <img class="img-fluid w-100 mx-auto d-block"  style="max-width: 80vh" src="{{ artwork.imageURL }}" alt="{{ artwork.name }}">
+
+                    <hr>
+                    <div class="row" >
+                        <div class="col-md-12">
+                            <h1>{{ artwork.name }}</h1>
+                            <p class="card-text align-content-start"> Artwork by: <a href="{{ artwork.artistUrl }}" target="_blank"> {{ artwork.artistName }}</a></p>
+                            <p class="card-text align-content-start">{{ artwork.description }}</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
