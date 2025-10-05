@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>My awesome Blog</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+
+
+
+    <link rel="shortcut icon" href="/assets/icons/computer-3.png" type="image/png">
+
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap.min.css') }}" >
+
+    <link rel="stylesheet" type="text/css" href="/assets/win95.css">
+    <style>
+        .trumbowyg-editor-box{
+            background-color: rgba(255,255,255,0.5);
+        }
+    </style>
+
+</head>
+
+<body class="windows-scrollbar">
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+
+                        <div class="card">
+                            <div class="card-header">Dashboard</div>
+                            <div class="card-body">
+                                <ul>
+                                    <li><a href="{{ path('app_artwork_index') }}">Artwork</a></li>
+                                    <li><a href="{{ path('app_image_index') }}">Image</a></li>
+                                    <li><a href="{{ path('app_blog_post_index') }}"> Blog </a></li>
+                                    <li><a href="{{ path('app_setting_index') }}"> App Settings </a></li>
+                                    <li><a href="{{ path('app_info_card_index') }}"> Cards </a></li>
+                                </ul>
+                            </div>
+
+            </div>
+        </div>
+        <div class="col-md-10">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<footer class="taskbar">
+    <div class="row" style="margin-right: 0px;">
+        <div class="col-8">
+
+            <a href="https://github.com/AlexBSoft/win95.css" class="btn start-button"><img src="/assets/icons/directory_folder_options-5.png" class="icon-16"> CSS Author GitHub</a>
+        </div>
+        <div class="col-4 time">CSS By Alex B</div>
+    </div>
+
+</footer>
+{% block javascripts %}
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js" integrity="sha384-ZBXiYtYQ6hJ2Y0ZNoYuI+Nq5MqWBr+chMrS/RkXpNzQCApHEhOt2aY8EJgqwHLkJ" crossorigin="anonymous"></script>
+<script src="{{ asset('assets/jquery.js') }}"></script>
+<script src="{{asset('assets/popper.min.js.1')}}" ></script>
+<script src="{{ asset('assets/bootstrap.min.js') }}" ></script>
+{% endblock %}
+</body>
+
+</html>

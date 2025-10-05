@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 
 {% block title %}Artwork index{% endblock %}
 
 {% block body %}
     <h1>Artwork index</h1>
 
-    <table class="table">
+    <table class="table table-responsive">
         <thead>
             <tr>
                 <th>Id</th>
@@ -25,6 +25,7 @@
                 <td>{{ artwork.artistName }}</td>
                 <td>{{ artwork.artistUrl }}</td>
                 <td>
+
                     <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">show</a>
                     <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}">edit</a>
                 </td>
@@ -38,4 +39,5 @@
     </table>
 
     <a href="{{ path('app_artwork_new') }}">Create new</a>
+
 {% endblock %}

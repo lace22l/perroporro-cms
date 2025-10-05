@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 
 {% block title %}Image index{% endblock %}
 
 {% block body %}
     <h1>Image index</h1>
 
-    <table class="table">
+    <table class="table table-responsive">
         <thead>
             <tr>
                 <th>Id</th>
@@ -23,6 +23,7 @@
                 <td>{{ image.path }}</td>
                 <td>{{ image.mimeType }}</td>
                 <td>
+                    <a href="#" class="copy-link" data-link="{{ url('image_show', {'image': image.id}) }}">Copy Link</a>
                     <a href="{{ path('app_image_show', {'id': image.id}) }}">show</a>
                     <a href="{{ path('app_image_edit', {'id': image.id}) }}">edit</a>
                 </td>
@@ -36,4 +37,21 @@
     </table>
 
     <a href="{{ path('app_image_new') }}">Create new</a>
+    <script>
+        document.querySelectorAll('.copy-link').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const linkToCopy = button.dataset.link; // get the link from the data attribute
+
+                try {
+                    await navigator.clipboard.writeText(linkToCopy);
+                    button.textContent = 'Copied!';
+                    setTimeout(() => button.textContent = 'Copy link', 1500);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            });
+        });
+    </script>
 {% endblock %}
